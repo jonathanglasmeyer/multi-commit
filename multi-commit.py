@@ -5,8 +5,6 @@ from subprocess import Popen, PIPE, STDOUT
 from tempfile import SpooledTemporaryFile as tempfile
 from pprint import pprint
 REGEX_NEWFILE='diff --git a/(?P<name>[^\s]+) b/(?P=name)'
-# REGEX_NEWFILE='diff --git a/(?P<name>[^\s]+)'
-# REGEX_NEWFILE=r'diff --git'
 _, TERMINAL_COLUMNS = map(int,os.popen('stty size', 'r').read().split())
 
 
@@ -17,11 +15,6 @@ COLOR_GREY_DARK = gray(6)
 COLOR_CAPTION1_BG=gray(5)
 COLOR_CAPTION2_FG=gray(9)
 INDENT=3
-# for value in range(24):
-    # print_color('  ', bg=gray(value), end='')
-
-# for x in range(0,16):
-#     print_color(x, fg=x)
 
 commits = []
 
@@ -162,11 +155,9 @@ def prompt(text=None):
 def interact(diffs):
     diffs = map(DotDict, diffs)
     for f in diffs:
-        # print_color('{0: <60}'.format(f.filename), bg=COLOR_GREY_DARK)
         for hunk_nr, hunk in enumerate(f.hunks):
             os.system('clear')
             print_commits()
-            # print_caption0('Hunks')
             print_caption1(f.filename)
             print_hunk(hunk)
             item = commit_item(f.filename, hunk_nr)
@@ -222,7 +213,6 @@ def get_hunks(diffs, fname):
 def main():
     repo_dir='/home/jwerner/dev/multi-commit'
 
-    # subprocess.call('git add --intent-to-add .', shell=True, cwd=repo_dir)
     diff = subprocess.check_output('git diff -U1', shell=True, cwd=repo_dir)
     diff_string = diff.decode('utf-8')
 

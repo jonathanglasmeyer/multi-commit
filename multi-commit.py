@@ -230,7 +230,7 @@ def main():
             stdout = Popen('git apply -v --cached', shell=True, stdout=PIPE, stdin=f, stderr=STDOUT, cwd=repo_dir).stdout.read()
             print(stdout.decode('utf-8'))
 
-        stdout = subprocess.check_output("git commit -m {}".format(commit['msg']), shell=True, cwd=repo_dir)
+        stdout = subprocess.check_output("git commit -m '{}'".format(commit['msg']), shell=True, cwd=repo_dir)
         print(stdout.decode('utf-8'))
 
 

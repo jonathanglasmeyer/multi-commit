@@ -63,7 +63,6 @@ def print_commit(n, commit):
 def print_commits():
     if len(commits) == 0: return
 
-    print_caption1('commit messages')
     for n, commit in enumerate(commits):
         print_commit(n, commit)
     print()
@@ -149,7 +148,6 @@ def parse(diff_string):
     return files
 
 def prompt(text=None):
-    print_line_bottom()
     return input('{}> '.format(text + '\n' if text else ''))
 
 def interact(diffs):
@@ -157,10 +155,12 @@ def interact(diffs):
     for f in diffs:
         for hunk_nr, hunk in enumerate(f.hunks):
             os.system('clear')
-            print_commits()
             print_caption1(f.filename)
             print_hunk(hunk)
             item = commit_item(f.filename, hunk_nr)
+
+            print_line_bottom()
+            print_commits()
             while 1:
                 i = prompt()
                 if len(i)==0: break
@@ -220,6 +220,7 @@ def main():
     interact(diffs)
     show_summary(diffs)
 
+    print_line_bottom()
     if prompt('Commit everything? (y/_)') != 'y': return
     for commit in commits:
         patches = create_patches(diffs, commit)

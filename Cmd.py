@@ -5,7 +5,8 @@ class Cmd:
         self.wd = wd
 
     def check_output(self, cmd):
-        return subprocess.check_output(cmd, shell=True, cwd=self.wd)
+        return subprocess.check_output(
+            cmd, shell=True, cwd=self.wd).decode('utf-8')
 
     def call(self, cmd):
         return subprocess.call(cmd, shell=True, cwd=self.wd)

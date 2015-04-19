@@ -90,16 +90,33 @@ def create_patches(diffs, commit):
 
     return patches
 
+def check_untracked_files(cmd):
+    print_caption1('Untracked Files')
+    result = cmd.untracked_files()
+    print(result)
+
+    if result:
+        i = prompt('there are untracked files. '
+            'add --intent-to-add all? (y/_)')
+        if i == 'y': cmd.add_intent_to_add()
+        if i == 'q': sys.exit()
+
+
+
+
+
 def main():
     repo_dir = os.getcwd()
     commits = []
     cmd = Cmd(repo_dir)
 
-    diff = subprocess.check_output('git diff -U1', shell=True, cwd=repo_dir)
-    diff_string = diff.decode('utf-8')
+    check_untracked_files(cmd)
 
-    diffs = parse(diff_string)
-    if diffs and stage_hunks(diffs, commits, cmd):
+    diff = cmd.check_output('git diff -U1')
+
+    diffs = parse(diff)
+    if diffs:
+        stage_hunks(diffs, commits, cmd)
         show_summary(diffs, commits)
         commit_all(diffs, commits, repo_dir)
 

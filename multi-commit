@@ -58,7 +58,7 @@ def commit_all(diffs, commits, repo_dir):
     if prompt('Commit everything? (y/_)') != 'y': return
     for commit in commits:
         patches = create_patches(diffs, commit)
-        # print("Committing '{}'".format(commit['msg']))
+        print("Committing '{}'".format(commit['msg']))
         for patch in patches:
             f = tempfile()
             f.write(bytes(patch, 'utf-8') + b'\n'); f.seek(0)

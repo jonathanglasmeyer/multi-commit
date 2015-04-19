@@ -15,6 +15,7 @@ def stage_hunks(diffs, commits, cmd):
     diffs = map(DotDict, diffs)
     for f in diffs:
         for hunk_nr, hunk in enumerate(f.hunks):
+            cmd.e(f.filename)
             os.system('clear')
             print_caption1(f.filename)
             print_hunk(hunk)

@@ -19,13 +19,13 @@ def stage_hunks(diffs, commits, cmd):
             os.system('clear')
             print_caption1(f.filename)
             print_hunk(hunk)
-            item = commit_item(f.filename, hunk_nr)
+            print_line()
+            print_commits(commits)
 
-            print_line_bottom()
-            print_commits()
+            item = make_commit_item(f.filename, hunk_nr)
             while 1:
                 i = prompt()
-                if len(i)==0: break
+                if len(i) == 0: break
 
                 if i.isdigit() and len(i) == 1:
                     number = int(i)
@@ -73,7 +73,9 @@ def get_hunks(diffs, fname):
     return [f for f in diffs if f['filename'] == fname][0]['hunks']
 
 def main():
-    repo_dir='/home/jwerner/dev/multi-commit'
+    repo_dir = os.getcwd()
+    commits = []
+    cmd = Cmd(repo_dir)
 
     diff = subprocess.check_output('git diff -U1', shell=True, cwd=repo_dir)
     diff_string = diff.decode('utf-8')

@@ -100,7 +100,7 @@ def main():
     diff_string = diff.decode('utf-8')
 
     diffs = parse(diff_string)
-    if stage_hunks(diffs, commits, cmd):
+    if diffs and stage_hunks(diffs, commits, cmd):
         show_summary(diffs, commits)
         commit_all(diffs, commits, repo_dir)
 

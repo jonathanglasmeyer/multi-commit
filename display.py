@@ -7,7 +7,8 @@ COLOR_RED = 8
 COLOR_GREY = gray(8)
 COLOR_GREY_DARK = gray(6)
 COLOR_CAPTION1_BG=gray(5)
-COLOR_CAPTION2_FG=gray(11)
+COLOR_CAPTION2_FG=gray(12)
+COLOR_CONTEXT=gray(7)
 
 INDENT=3
 
@@ -76,7 +77,7 @@ def print_hunk(hunk, fname=None):
             else:
                 # print_color('.' + ' '*(INDENT-1), end='', fg=COLOR_GREY)
                 print_color(' '*INDENT, end='', fg=COLOR_GREY)
-                print_indented_paragraph(line[1:], COLOR_CAPTION2_FG)
+                print_indented_paragraph(line[1:], COLOR_CONTEXT)
     print('')
 
 def prompt(text=None):

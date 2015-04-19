@@ -5,3 +5,7 @@ you can assign them to multiple future commits on the fly. that way you can just
 
 missing:
  - splitting hunks
+
+bugs:
+ - single '' in commit message break subprocess.call
+ - 

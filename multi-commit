@@ -89,12 +89,6 @@ def create_patches(diffs, commit):
 
     return patches
 
-def get_header(diffs, fname):
-    return [f for f in diffs if f['filename'] == fname][0]['header']
-
-def get_hunks(diffs, fname):
-    return [f for f in diffs if f['filename'] == fname][0]['hunks']
-
 def main():
     repo_dir = os.getcwd()
     commits = []

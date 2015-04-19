@@ -12,3 +12,7 @@ class Cmd:
 
     def e(self, fname):
         self.call('gvim --servername vim --remote-silent ' + fname)
+
+    def untracked_files(self):
+        self.check_output('git ls-files --others --exclude-standard')
+

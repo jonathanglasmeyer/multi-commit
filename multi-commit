@@ -26,7 +26,7 @@ def stage_hunks(diffs, commits, cmd):
             while 1:
                 i = prompt()
                 if len(i) == 0: break
-                if i == 'q': return False
+                if i == 'q': sys.exit()
 
                 if i.isdigit() and len(i) == 1:
                     number = int(i)
@@ -40,7 +40,6 @@ def stage_hunks(diffs, commits, cmd):
                     commits.append({'msg': i})
                     commits[-1]['hunks'] = [item]
                     break
-    return True;
 
 def show_summary(diffs, commits):
     os.system('clear')

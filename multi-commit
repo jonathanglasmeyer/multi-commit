@@ -40,7 +40,7 @@ def stage_hunks(diffs, commits, cmd):
                     commits[-1]['hunks'] = [item]
                     break
 
-def show_summary(diffs):
+def show_summary(diffs, commits):
     os.system('clear')
     print_caption1('Commit Summary')
     for n, commit in enumerate(commits):
@@ -81,23 +81,8 @@ def main():
     diff_string = diff.decode('utf-8')
 
     diffs = parse(diff_string)
-    interact(diffs)
-    show_summary(diffs)
-
-    print_line_bottom()
-    if prompt('Commit everything? (y/_)') != 'y': return
-    for commit in commits:
-        patches = create_patches(diffs, commit)
-        print("Committing '{}'".format(commit['msg']))
-        for patch in patches:
-            f = tempfile()
-            f.write(bytes(patch, 'utf-8') + b'\n'); f.seek(0)
-            stdout = Popen('git apply -v --cached', shell=True, stdout=PIPE, stdin=f, stderr=STDOUT, cwd=repo_dir).stdout.read()
-            print(stdout.decode('utf-8'))
-
-        stdout = subprocess.check_output("git commit -m '{}'".format(commit['msg']), shell=True, cwd=repo_dir)
-        print(stdout.decode('utf-8'))
-
-
+    stage_hunks(diffs, commits, cmd)
+    show_summary(diffs, commits)
+    commit_all(diffs, commits, repo_dir)
 
 main()

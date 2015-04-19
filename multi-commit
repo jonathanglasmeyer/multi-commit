@@ -51,10 +51,33 @@ def show_summary(diffs, commits):
             hunk = get_hunks(diffs, fname)[hunk_nr]
             print_hunk(hunk, fname)
 
-def format_patch(header, hunk):
-    return '\n'.join(header) + '\n' + '\n'.join(hunk)
+def commit_all(diffs, commits, repo_dir):
+    print_line()
+    if prompt('Commit everything? (y/_)') != 'y': return
+    for commit in commits:
+        patches = create_patches(diffs, commit)
+        # print("Committing '{}'".format(commit['msg']))
+        for patch in patches:
+            f = tempfile()
+            f.write(bytes(patch, 'utf-8') + b'\n'); f.seek(0)
+            stdout = Popen('git apply -v --cached', shell=True, stdout=PIPE, stdin=f, stderr=STDOUT, cwd=repo_dir).stdout.read()
+            # print(stdout.decode('utf-8'))
+
+        stdout = subprocess.check_output("git commit -m '{}'".format(commit['msg']), shell=True, cwd=repo_dir)
+        # print(stdout.decode('utf-8'))
+
+def get_hunks(diffs, fname):
+    return [f for f in diffs if f['filename'] == fname][0]['hunks']
 
 def create_patches(diffs, commit):
+
+    def format_patch(header, hunk):
+        return '\n'.join(header) + '\n' + '\n'.join(hunk)
+
+    def get_header(diffs, fname):
+        return [f for f in diffs if f['filename'] == fname][0]['header']
+
+
     patches = []
     for hunk_obj in commit['hunks']:
         fname = hunk_obj['filename']

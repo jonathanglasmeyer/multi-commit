@@ -15,5 +15,8 @@ class Cmd:
         self.call('gvim --servername vim --remote-silent ' + fname)
 
     def untracked_files(self):
-        self.check_output('git ls-files --others --exclude-standard')
+        return self.check_output('git ls-files --others --exclude-standard')
+
+    def add_intent_to_add(self):
+        self.call('git add --intent-to-add *')
 

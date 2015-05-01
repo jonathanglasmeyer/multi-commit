@@ -107,6 +107,17 @@ def check_untracked_files(cmd):
         if i == 'y': cmd.add_intent_to_add()
         if i == 'q': sys.exit()
 
+def check_log_statements(cmd):
+
+    result = cmd.find_console_logs()
+    if result:
+        print_caption1('Log Statements')
+        cmd.show_console_logs()
+
+        i = prompt('there are log statements. '
+            'remove them all? (y/q/_)')
+        if i == 'y': cmd.remove_console_logs()
+        if i == 'q': sys.exit()
 
 def main():
     repo_dir = os.getcwd()
@@ -114,6 +125,7 @@ def main():
     cmd = Cmd(repo_dir)
 
     check_untracked_files(cmd)
+    check_log_statements(cmd)
 
     diff = cmd.check_output('git diff -U1')
 

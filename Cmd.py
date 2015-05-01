@@ -1,4 +1,7 @@
 import subprocess
+import os
+
+LOG_STATEMENT_REGEX='console\.[log|info]'
 
 class Cmd:
     def __init__(self, wd):
@@ -19,4 +22,18 @@ class Cmd:
 
     def add_intent_to_add(self):
         self.call('git add --intent-to-add *')
+
+    def show_console_logs(self):
+        self.call('ag "{}"'.format(LOG_STATEMENT_REGEX))
+        print()
+
+    def find_console_logs(self):
+        try:
+            return self.check_output('ag "{}"'.format(LOG_STATEMENT_REGEX))
+
+        except subprocess.CalledProcessError:
+            return False
+
+    def remove_console_logs(self):
+        self.call('ag -l "{0}" | xargs sed -i "/{0}/d"'.format(LOG_STATEMENT_REGEX))
 

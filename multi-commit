@@ -29,7 +29,7 @@ def stage_hunks(diffs, commits, cmd):
                 if len(i) == 0: break
                 if i == 'q': sys.exit()
 
-                if i.isdigit() and len(i) == 1:
+                if i.isdigit():
                     number = int(i)
                     if number <= len(commits):
                         commits[number-1]['hunks'].append(item)

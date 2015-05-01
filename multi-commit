@@ -38,7 +38,8 @@ def stage_hunks(diffs, commits, cmd):
                         continue
                 else:
                     if not i: continue
-                    commits.append({'msg': i})
+                    i2 = multiline_prompt('\nEnter commit description (enter to skip, empty line to finish):')
+                    commits.append({'msg': [i] if len(i2) == 0 else [i, i2]})
                     commits[-1]['hunks'] = [item]
                     break
 
@@ -65,14 +66,18 @@ def commit_all(diffs, commits, repo_dir):
 
     for commit in commits:
         patches = create_patches(diffs, commit)
-        print("Committing '{}'".format(commit['msg']))
+        print("Committing '{}'".format(commit['msg'][0]))
         for patch in patches:
             f = tempfile()
             f.write(bytes(patch, 'utf-8') + b'\n'); f.seek(0)
             stdout = Popen('git apply -v --cached', shell=True, stdout=PIPE, stdin=f, stderr=STDOUT, cwd=repo_dir).stdout.read()
             # print(stdout.decode('utf-8'))
 
-        stdout = subprocess.check_output('git commit -m "{}"'.format(commit['msg']), shell=True, cwd=repo_dir)
+        if len(commit['msg']) == 1:
+            stdout = subprocess.check_output('git commit -m "{}"'.format(commit['msg']), shell=True, cwd=repo_dir)
+        else:
+            stdout = subprocess.check_output('git commit -m "{}" -m "{}"'.format(*commit['msg']), shell=True, cwd=repo_dir)
+
         # print(stdout.decode('utf-8'))
 
 

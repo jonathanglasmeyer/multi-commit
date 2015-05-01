@@ -33,16 +33,23 @@ def print_commit_caption(n, commit):
     print()
     hunks_count = len(commit['hunks'])
     print_color('[{}] '.format(n+1), fg=COLOR_YELLOW, end='')
-    print_color(commit['msg'], end='')
+    print_color(commit['msg'][0], end='')
+
     print_color(' ({} hunk{})'.format(
         hunks_count, 's' if hunks_count>1 else ''), fg=COLOR_GREY_DARK)
+
+    if len(commit['msg']) == 2:
+        print()
+        for line in commit['msg'][1].split('\n'):
+            print_indented_paragraph(' '*4 + line, COLOR_CAPTION2_FG, 4)
+
     print_line(COLOR_YELLOW)
     print()
 
 def print_commit(n, commit):
     hunks_count = len(commit['hunks'])
     print_color('[{}] '.format(n+1), fg=2, end='')
-    print_color(commit['msg'], end='')
+    print_color(commit['msg'][0], end='')
     print_color(' ({} hunk{})'.format(
         hunks_count, 's' if hunks_count>1 else ''), fg=COLOR_GREY)
 
@@ -59,7 +66,7 @@ def print_indented_paragraph(paragraph, color):
         print()
         return
     for n, line in enumerate(lines):
-        pc((0 if n==0 else INDENT)*' ' + line, color)
+        pc((0 if n==0 else indent)*' ' + line, color)
 
 def print_hunk(hunk, fname=None):
     for line in hunk:
@@ -82,3 +89,14 @@ def print_hunk(hunk, fname=None):
 
 def prompt(text=None):
     return input('{}> '.format(text + '\n' if text else ''))
+
+def multiline_prompt(prompt_text=None):
+    text = ""
+    stopword = ""
+    print(prompt_text)
+    while True:
+        line = input()
+        if line.strip() == stopword:
+            break
+        text += "%s\n" % line
+    return text

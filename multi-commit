@@ -57,7 +57,12 @@ def show_summary(diffs, commits):
 
 def commit_all(diffs, commits, repo_dir):
     print_line()
-    if prompt('Commit everything? (y/_)') != 'y': return
+    while 1:
+        i = prompt('Commit everything? (y/_)')
+        if i == 'y':
+            break
+        if i == 'n': sys.exit()
+
     for commit in commits:
         patches = create_patches(diffs, commit)
         print("Committing '{}'".format(commit['msg']))

@@ -56,6 +56,10 @@ def show_summary(diffs, commits):
             hunk = get_hunks(diffs, fname)[hunk_nr]
             print_hunk(hunk, fname)
 
+def replace_quotes(string):
+    string_ = string.replace('"', '\\"')
+    string__ = string_.replace("'", "\\'")
+    return string__
 
 def commit_all(diffs, commits, repo_dir):
     print_line()
@@ -75,9 +79,9 @@ def commit_all(diffs, commits, repo_dir):
             # print(stdout.decode('utf-8'))
 
         if len(commit['msg']) == 1:
-            stdout = subprocess.check_output('git commit -m "{}"'.format(commit['msg'][0]), shell=True, cwd=repo_dir)
+            stdout = subprocess.check_output('git commit -m "{}"'.format(replace_quotes(commit['msg'][0])), shell=True, cwd=repo_dir)
         else:
-            stdout = subprocess.check_output('git commit -m "{}" -m "{}"'.format(*commit['msg']), shell=True, cwd=repo_dir)
+            stdout = subprocess.check_output('git commit -m "{}" -m "{}"'.format(*map(replace_quotes,commit['msg'])), shell=True, cwd=repo_dir)
 
         # print(stdout.decode('utf-8'))
 

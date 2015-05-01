@@ -6,6 +6,7 @@ from DotDict import DotDict
 import subprocess, re, os, sys
 from subprocess import Popen, PIPE, STDOUT
 from tempfile import SpooledTemporaryFile as tempfile
+import readline
 
 
 def stage_hunks(diffs, commits, cmd):

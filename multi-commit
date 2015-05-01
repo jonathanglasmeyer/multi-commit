@@ -75,7 +75,7 @@ def commit_all(diffs, commits, repo_dir):
             # print(stdout.decode('utf-8'))
 
         if len(commit['msg']) == 1:
-            stdout = subprocess.check_output('git commit -m "{}"'.format(commit['msg']), shell=True, cwd=repo_dir)
+            stdout = subprocess.check_output('git commit -m "{}"'.format(commit['msg'][0]), shell=True, cwd=repo_dir)
         else:
             stdout = subprocess.check_output('git commit -m "{}" -m "{}"'.format(*commit['msg']), shell=True, cwd=repo_dir)
 

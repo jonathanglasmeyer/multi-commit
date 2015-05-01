@@ -61,8 +61,8 @@ def print_commits(commits):
         print_commit(n, commit)
     print()
 
-def print_indented_paragraph(paragraph, color):
-    lines = textwrap.wrap(paragraph, TERMINAL_COLUMNS-INDENT-5)
+def print_indented_paragraph(paragraph, color, indent=INDENT):
+    lines = textwrap.wrap(paragraph, TERMINAL_COLUMNS-indent-5)
     if len(lines) == 0:
         print()
         return

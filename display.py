@@ -90,15 +90,17 @@ def print_hunk(hunk, fname=None):
                 print_indented_paragraph(line[1:], COLOR_CONTEXT)
     print('')
 
-def prompt(text=None):
-    return input('{}> '.format(text + '\n' if text else ''))
+def prompt(text=None, hint=None):
+    if text: print(text)
+    if hint: print_color(hint, fg=COLOR_GREY)
+    return input('\n> ')
 
 def multiline_prompt(prompt_text=None):
     text = ""
     stopword = ""
     print(prompt_text)
     while True:
-        line = input()
+        line = input('> ')
         if line.strip() == stopword:
             break
         text += "%s\n" % line

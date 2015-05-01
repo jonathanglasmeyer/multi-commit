@@ -53,6 +53,7 @@ def print_commit(n, commit):
     print_color(' ({} hunk{})'.format(
         hunks_count, 's' if hunks_count>1 else ''), fg=COLOR_GREY)
 
+# overview above the commit message input prompt
 def print_commits(commits):
     if len(commits) == 0: return
 

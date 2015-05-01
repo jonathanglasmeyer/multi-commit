@@ -60,7 +60,7 @@ def show_summary(diffs, commits):
 def commit_all(diffs, commits, repo_dir):
     print_line()
     while 1:
-        i = prompt('Commit everything? (y/_)')
+        i = prompt('Commit everything? (y/n)')
         if i == 'y':
             break
         if i == 'n': sys.exit()

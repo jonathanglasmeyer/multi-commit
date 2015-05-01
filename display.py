@@ -31,6 +31,7 @@ def print_caption2(caption):
 
 def print_commit_caption(n, commit):
     print()
+    print_line(COLOR_YELLOW)
     hunks_count = len(commit['hunks'])
     print_color('[{}] '.format(n+1), fg=COLOR_YELLOW, end='')
     print_color(commit['msg'][0], end='')
@@ -43,7 +44,8 @@ def print_commit_caption(n, commit):
         for line in commit['msg'][1].split('\n'):
             print_indented_paragraph(' '*4 + line, COLOR_CAPTION2_FG, 4)
 
-    print_line(COLOR_YELLOW)
+    print_line(COLOR_GREY_DARK)
+
     print()
 
 def print_commit(n, commit):
@@ -73,7 +75,7 @@ def print_hunk(hunk, fname=None):
     for line in hunk:
         if line.startswith('@@'):
             line = line.strip()[3:-2]
-            print_caption2('{}{}'.format(fname + ': ' if fname else '', line))
+            print_caption2(' '*INDENT + '{}{}'.format(fname + ': ' if fname else '', line))
         else:
 
             if line.startswith('+'):

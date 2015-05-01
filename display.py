@@ -104,4 +104,6 @@ def multiline_prompt(prompt_text=None):
         if line.strip() == stopword:
             break
         text += "%s\n" % line
-    return text
+    git_formatted_text = '\n'.join(
+            ['\n'.join(textwrap.wrap(line, width=72)) for line in text.split('\n')])
+    return git_formatted_text

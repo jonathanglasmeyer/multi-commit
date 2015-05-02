@@ -60,7 +60,7 @@ class Commit:
         if show_ui_id:
             print_color('{}) '.format(self.ui_id), fg=COLOR_GREY, end='')
         print_color('{}{}: '.format('  ' if not show_ui_id else '', self.author), fg=COLOR_GREEN, end='')
-        print(self.message + '\n')
+        print_indented_paragraph(self.message + '\n', indent=3)
 
         # '[{}] {}\n'.format(self.ui_id, self.message)
 

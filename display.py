@@ -64,13 +64,16 @@ def print_commits(commits):
         print_commit(n, commit)
     print()
 
-def print_indented_paragraph(paragraph, color, indent=INDENT):
-    lines = textwrap.wrap(paragraph, TERMINAL_COLUMNS-indent-5)
+def print_indented_paragraph(paragraph, color=None, indent=INDENT):
+    lines = textwrap.wrap(paragraph, TERMINAL_COLUMNS-indent-7)
     if len(lines) == 0:
         print()
         return
     for n, line in enumerate(lines):
-        pc((0 if n==0 else indent)*' ' + line, color)
+        str_ = (0 if n==0 else indent)*' ' + line
+        if color:
+            pc(str_, color)
+        else: print(str_)
 
 def print_hunk(hunk, fname=None):
     for line in hunk:

@@ -53,25 +53,21 @@ def main():
         if active_hunk_nr == None:
             print_color('[space]: older / [backspace]: newer / [char]: open commit diff / [qq]uit', fg=COLOR_GREY_DARK)
         else:
-            print_color('[n]: next hunk / [e]: prev hunk / [space]: close / [qq]uit', fg=COLOR_GREY_DARK)
+            print_color('[n/space]: next hunk / [e/backspace]: prev hunk / [q]: close / [qq]uit', fg=COLOR_GREY_DARK)
 
         i = getch()
 
 
         if active_hunk_nr != None:
             nr = active_hunk_nr
-            if i == 'n':
+            if i == 'n' or i == ' ':
                 active_hunk_nr += 1
-            if i == 'e':
+            if i == 'e' or ord(i) == 127:
                 active_hunk_nr -= 1
 
-            if ord(i) == 13 or ord(i) == 127 or i == ' ': # enter or backspace or space
+            if ord(i) == 13 or i == 'q': # enter or backspace or space
                 active_hunk_nr = None
                 active_commit_ui_id = None
-
-            # escape
-            elif i == 'q':
-                if getch() == 'q': sys.exit();
 
 
         elif active_hunk_nr == None:

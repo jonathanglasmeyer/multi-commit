@@ -41,6 +41,7 @@ def print_commit_group(commit_group, active_commit_ui_id, active_hunk_nr):
     for i, commit in enumerate(commits):
         commit.ui_id = id_encode(i)
         commit.display_summary()
+        print()
 
         # optionally print commit description
         if commit.description:
@@ -59,7 +60,7 @@ def print_commit_group(commit_group, active_commit_ui_id, active_hunk_nr):
             print_line(COLOR_YELLOW)
             print()
             commit.display_summary(show_ui_id=False)
-            # print()
+            print()
             if commit.description:
                 print_indented_paragraph('  '+commit.description, COLOR_GREY_BRIGHT, 2)
                 print()

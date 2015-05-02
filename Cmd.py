@@ -3,16 +3,21 @@ import os
 
 LOG_STATEMENT_REGEX='console\.[log|info]'
 
-class Cmd:
+class CmdBase:
     def __init__(self, wd):
         self.wd = wd
 
     def check_output(self, cmd):
         return subprocess.check_output(
-            cmd, shell=True, cwd=self.wd).decode('utf-8')
+            cmd, shell=True, cwd=self.wd).decode('utf-8', errors='replace')
 
     def call(self, cmd):
         return subprocess.call(cmd, shell=True, cwd=self.wd)
+
+class CmdMultiCommit(CmdBase):
+
+    def __init__(self, wd):
+        CmdBase.__init__(self, wd)
 
     def e(self, fname):
         self.call('gvim --servername vim --remote-silent ' + fname)
@@ -36,4 +41,11 @@ class Cmd:
 
     def remove_console_logs(self):
         self.call('ag -l "{0}" | xargs sed -i "/{0}/d"'.format(LOG_STATEMENT_REGEX))
+        
+
+
+class CmdLog(CmdBase):
+
+    def __init__(self, wd):
+        CmdBase.__init__(self, wd)
 

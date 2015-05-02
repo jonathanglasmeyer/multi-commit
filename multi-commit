@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from display import *
-from Cmd import Cmd
+from Cmd import CmdMultiCommit
 from parse import parse
 from DotDict import DotDict
 import subprocess, re, os, sys
@@ -137,7 +137,7 @@ def check_log_statements(cmd):
 def main():
     repo_dir = os.getcwd()
     commits = []
-    cmd = Cmd(repo_dir)
+    cmd = CmdMultiCommit(repo_dir)
 
     check_untracked_files(cmd)
     check_log_statements(cmd)

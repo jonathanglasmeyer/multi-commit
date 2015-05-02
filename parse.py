@@ -14,13 +14,13 @@ def file_dict(fname, hunks, hunk, header):
         'header': header
     }
 
-def parse(diff_string):
+def parse(diff_string=None, diff_string_lines=None):
     files = []
     current_file = ''
     current_hunks = []
     current_header = []
     current_hunk = []
-    for line in diff_string.split('\n'):
+    for line in diff_string.split('\n') if diff_string else diff_string_lines:
         new_file_line = re.search(REGEX_NEWFILE, line)
         if new_file_line:
             fname = new_file_line.group('name')

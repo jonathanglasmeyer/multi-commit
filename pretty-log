@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+import os, re, datetime, sys
+from itertools import *
+from pprint import pprint
+from getch import getch
+
+
+from display import *
+from Commit import Commit
+from helpers import find_prev_ui_id, find_next_ui_id
+from display_pretty_log import *
+from Cmd import CmdLog
+# REGEX_NEWFILE = r'diff --git a/(?P<name>[^\s]+) b/(?P=name)'
+REGEX_AUTHOR = r'Author: ([\w\s]+)'
+
+NEXT=999
+PREV=9999
+repo_dir = os.getcwd()
+cmd = CmdLog(repo_dir)
+
+def commits_per_day_generator(commits):
+    keyfunc = lambda commit: commit.date.date()
+    commits_sorted = sorted(commits, key=keyfunc)
+    return list([date, list(group)] for date, group in groupby(commits_sorted, key=keyfunc))
+
+def main():
+
+    log = cmd.check_output('git diff -U1')
+    commits = map(Commit, cmd.check_output('git log --format="format:%h %at %s"').split('\n'))
+    commit_groups = list(reversed(commits_per_day_generator(commits)))
+
+    index = 0 # start with most recent commit day
+    active_commit_ui_id = None
+    active_hunk_nr = None
+    while 1:
+        os.system('clear')
+        commits_count, active_hunk_nr = print_commit_group(commit_groups[index], active_commit_ui_id, active_hunk_nr)
+
+        # special case: from last hunk to first hunk of next commit in detail view
+        if active_hunk_nr == NEXT or active_hunk_nr == PREV:
+
+            if active_hunk_nr == NEXT:
+                active_commit_ui_id = find_next_ui_id(commit_groups[index], active_commit_ui_id)
+                active_hunk_nr = 0
+            else:
+                active_commit_ui_id = find_prev_ui_id(commit_groups[index], active_commit_ui_id)
+                active_hunk_nr = -2
+
+            os.system('clear')
+            commits_count, active_hunk_nr = print_commit_group(commit_groups[index], active_commit_ui_id, active_hunk_nr)
+
+        # prompt text
+        if active_hunk_nr == None:
+            print_color('[space]: older / [backspace]: newer / [char]: open commit diff / [qq]uit', fg=COLOR_GREY_DARK)
+        else:
+            print_color('[n]: next hunk / [e]: prev hunk / [space]: close / [qq]uit', fg=COLOR_GREY_DARK)
+
+        i = getch()
+
+
+        if active_hunk_nr != None:
+            nr = active_hunk_nr
+            if i == 'n':
+                active_hunk_nr += 1
+            if i == 'e':
+                active_hunk_nr -= 1
+
+            if ord(i) == 13 or ord(i) == 127 or i == ' ': # enter or backspace or space
+                active_hunk_nr = None
+                active_commit_ui_id = None
+
+            # escape
+            elif i == 'q':
+                if getch() == 'q': sys.exit();
+
+
+        elif active_hunk_nr == None:
+            # character
+            if ord(i) >= 97 and ord(i) <= 122:
+                if commits_count > 25:
+                    i2 = getch()
+                    if ord(i2) >= 97 and ord(i2) <= 122:
+                        active_commit_ui_id = i + i2
+                        active_hunk_nr = 0
+                else:
+                    active_commit_ui_id = i
+                    active_hunk_nr = 0
+
+            # space: go down
+            if i == ' ':
+                active_commit_ui_id = None
+                active_hunk_nr = None
+                index = index + 1 if index < len(commit_groups) else len(commit_groups) - 1
+
+            # backspace: go up
+            elif ord(i) == 127:
+                active_commit_ui_id = None
+                active_hunk_nr = None
+                index = index - 1 if index > 0 else 0
+
+            # escape
+            elif i == 'q':
+                if getch() == 'q': sys.exit();
+
+main()

@@ -1,9 +1,10 @@
 import os, textwrap
 from colors import print_color, rgb, gray
-_, TERMINAL_COLUMNS = map(int,os.popen('stty size', 'r').read().split())
+TERMINAL_ROWS, TERMINAL_COLUMNS = map(int,os.popen('stty size', 'r').read().split())
 COLOR_YELLOW = 2
 COLOR_GREEN = 13
 COLOR_RED = 8
+COLOR_GREY_BRIGHT = gray(11)
 COLOR_GREY = gray(8)
 COLOR_GREY_DARK = gray(6)
 COLOR_CAPTION1_BG=gray(5)

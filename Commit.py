@@ -85,9 +85,10 @@ class Commit:
 
     @cached_property
     def author(self):
+        # TODO: print full name if first name is ambiguous (via some cache)
         author_long = self.full_text[1]
         nicknames = {'Niko Uphoff': 'Niko', 'Jonathan Werner': 'Jona'}
-        return nicknames[author_long] if author_long in nicknames else author_long
+        return nicknames[author_long] if author_long in nicknames else author_long.split()[0]
 
 
     @cached_property
